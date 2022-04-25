@@ -60,6 +60,3 @@ class Directory():
         for i in temp:
            self.FilesLocation.remove(i)
         print("Files excluded {}\nNames:{}".format(c,temp))
-
-
-
