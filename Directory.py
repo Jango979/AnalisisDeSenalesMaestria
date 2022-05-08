@@ -4,21 +4,15 @@ class Directory():
     def __init__(self,FolderName="Mediciones"):
         chdir(FolderName)
         self.Directory = listdir()
-        #print(self.Directory)
-        #self.Directory=self.Directory.remove(path.basename(__file__)))
         self.name = path.basename(__file__)
 
-        #self.Directory.remove(self.name)
-        #print(self.Directory)
         self.Local = getcwd()
         self.FilesLocation= []
         for i in self.Directory:
             current = self.Local+"\\"+i
-         #   print(current)
 
             for j in listdir(current):
                 location = current+"\\"+j
-                #location = location.replace("\\", "\\"*2)
                 self.FilesLocation.append(location)
 
 
@@ -45,7 +39,6 @@ class Directory():
                     temp.append(file)
                     c = c + 1
         self.FilesLocation = temp
-        #print(self.FilesLocation)
         print("Files removed {}".format(c))
 
 
