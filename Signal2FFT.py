@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from scipy import signal
 import matplotlib.pyplot as plt
 
@@ -23,7 +24,7 @@ class Signal2FFT():
         self.Fn = self.Fs / 2
         self.ff1= (1/self.TimeMax) * self.NT
 
-        print("Test 5 ✓ \n{}".format(self.VectorTime))
+        print("Test 5 ✓ ")
 
 
     def applybandpass(self, fLow=1, fHigh=31, order=2, lim_inf=0.1, lim_sup=31):
@@ -36,9 +37,9 @@ class Signal2FFT():
     def bandpassjoin(self,fLow=1, fHigh=31, order=2):
         self.VSignals={}
         self.analogsInputsNames.pop(0)
-        print(self.analogsInputsNames)
+        #rint(self.analogsInputsNames)
         for i,j in zip(self.analogsInputsNames, self.names):
-            print(self.analogsInputsNames)
+            #print(self.analogsInputsNames)
             SignalOffset = self.detrendSignal(self.DF.DataFrame[i])
             filtered = signal.sosfilt(self.bandpass(fLow=fLow,fHigh=fHigh,order=order),SignalOffset)
             ffiltered = np.fft.fft(filtered)**2
@@ -50,7 +51,7 @@ class Signal2FFT():
         print("Test 6 ✓")
 
 
-    def bandpass(self,fLow=1,fHigh=31,order=2):
+    def bandpass(self,fLow=1,fHigh=31,order=6):
         wLow = fLow*1.25*np.pi
         wHigh = fHigh*1.25*np.pi
         Wn = [wLow/self.ff1, wHigh/self.ff1]
@@ -72,12 +73,46 @@ class Signal2FFT():
     def getnames(self):
         print(self.names)
 
-    def plotfft(self, lim_inf=0.1, lim_sup=31,smooth_box_pts=5):
+    def plotfft(self, lim_inf=0.1, lim_sup=31,smooth_box_pts=11):
         lim_inf = self.find_nearest(self.fM,lim_inf)
         lim_sup = self.find_nearest(self.fM,lim_sup)
         for i in self.VSignals.keys():
-            plt.plot(self.fM[lim_inf:lim_sup],self.smooth(self.VSignals[i][lim_inf:lim_sup],box_pts=smooth_box_pts),label=i)
+            plt.plot(self.fM[lim_inf:lim_sup],signal.medfilt(self.smooth(self.VSignals[i][lim_inf:lim_sup],box_pts=smooth_box_pts)),label=i)
         plt.legend()
         plt.show()
+
+    def export(self,name="Concentracionfftdata.csv",type = None,lim_inf=0.1,lim_sup=10):
+        """type: linear,log"""
+        output = {}
+        if type is None:
+            type="linear"
+        if (type == "linear"):
+            print("Analisis linear")
+            lim_inf = self.find_nearest(self.fM, lim_inf)
+            lim_sup = self.find_nearest(self.fM, lim_sup)
+            ftimeout = np.around(self.fM[lim_inf:lim_sup],4)
+            output.update({"freq":ftimeout})
+            for i in self.VSignals.keys():
+                output.update({i:self.VSignals[i][lim_inf:lim_sup]})
+            output = pd.DataFrame(output)
+            output.to_csv(name)
+            return output
+        elif (type == "log" ):
+            print("Analisis logaritmico")
+            lim_inf = self.find_nearest(self.fM, lim_inf)
+            lim_sup = self.find_nearest(self.fM, lim_sup)
+            ftimeout = np.around(self.fM[lim_inf:lim_sup],4)
+            output.update({"freq":ftimeout})
+            for i in self.VSignals.keys():
+
+                output.update({i:pow(10, self.VSignals[i][lim_inf:lim_sup])})
+            output = pd.DataFrame(output)
+            output.to_csv(name)
+            return output
+
+
+
+
+
 
 
