@@ -11,10 +11,10 @@ A.getFileList()
 B = File(A.FilesLocation[0])
 B.add_time(no_sample=1000,to=1/1000,tf=180)
 
-#C = Signal2FFT(B)
-"""
-for i in A.FilesLocation:
-    B= File(i)
-    B.AddTime(noSample=1000,tf=180)
-    print(B)
-"""
+C = Signal2FFT(B)
+C.applybandpass(fLow=0.1, fHigh=7, order=2, lim_inf=0.1,lim_sup=8)
+
+#for i in A.FilesLocation:
+#    B= File(i)
+#    B.AddTime(noSample=1000,tf=180)
+#    print(B)
