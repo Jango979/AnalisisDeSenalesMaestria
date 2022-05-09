@@ -14,6 +14,8 @@ class Directory():
             for j in listdir(current):
                 location = current+"\\"+j
                 self.FilesLocation.append(location)
+        print("Test 1 ✓")
+
 
 
     def getFileList(self):
