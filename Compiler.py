@@ -8,12 +8,13 @@ A.excludeByFiles(["Hola.png", "ChuyRelajacion.xlsx", "Concentracion chuy.xlsx"])
 A.excludeByFormat(".acq")
 A.getFileList()
 
-B = File(A.FilesLocation[0])
+print(A.FilesLocation)
+B = File(A.FilesLocation[-1])
 B.add_time(no_sample=1000,to=1/1000,tf=180)
 
 C = Signal2FFT(B)
-C.applybandpass(fLow=0.1, fHigh=7, order=2, lim_inf=0.1,lim_sup=8)
-
+C.applybandpass(fLow=0.1, fHigh=7, order=2, lim_inf=0.1,lim_sup=10)
+D=C.export(type="log")
 #for i in A.FilesLocation:
 #    B= File(i)
 #    B.AddTime(noSample=1000,tf=180)
