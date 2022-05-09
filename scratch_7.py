@@ -15,7 +15,7 @@ def smooth(y, box_pts):
 
 Direccion ="C:\\Users\\danie\\PycharmProjects\\pythonProject\\AnalisisDeSenalesMaestria\\Mediciones\\Dr Miguel"
 os.chdir(Direccion)
-DF = read_excel("Concentracion2.xlsx")
+DF = read_excel("Concentracion2.xlsx",engine='openpyxl')
 
 
 Tiempo = DF["Time"]
